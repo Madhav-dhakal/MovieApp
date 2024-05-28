@@ -1,0 +1,67 @@
+﻿@model MovieModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1 class="text-center">Movie Details</h1>
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h4 class="card-title">Movie Information</h4>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-3">Movie Name</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.MovieName)</dd>
+
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
+
+                <dt class="col-sm-3">Director</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Director)</dd>
+
+                <dt class="col-sm-3">Duration</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Duration)</dd>
+
+                <dt class="col-sm-3">Genre</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Genre)</dd>
+
+                <dt class="col-sm-3">Rating</dt>
+                <dd class="col-sm-9">
+                    <div class="rating">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= Model.Rating)
+                            {
+                                <span class="fa fa-star checked"></span>
+                            }
+                            else
+                            {
+                                <span class="fa fa-star"></span>
+                            }
+                        }
+                    </div>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a asp-action="Update" asp-route-id="@Model?.Id" class="btn btn-warning me-2">Update</a>
+    <a asp-action="List" class="btn btn-secondary">Back to List</a>
+</div>
+
+<style>
+    .rating {
+        display: flex;
+    }
+    .fa-star {
+        font-size: 1.5rem;
+        color: #ccc;
+    }
+    .fa-star.checked {
+        color: #ffcc00;
+    }
+</style>

@@ -1,0 +1,42 @@
+﻿@model MovieModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1 class="text-center">Delete</h1>
+
+<div class="container mt-4">
+    <h3 class="text-center mb-4">Are you sure you want to delete this?</h3>
+    
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h4 class="card-title">Movie Information</h4>
+            <hr />
+            <dl class="row">
+                <dt class="col-sm-3">Movie Name</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.MovieName)</dd>
+
+                <dt class="col-sm-3">Description</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
+
+                <dt class="col-sm-3">Director</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Director)</dd>
+
+                <dt class="col-sm-3">Duration</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Duration)</dd>
+
+                <dt class="col-sm-3">Genre</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Genre)</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <form asp-action="DeleteConfirmed">
+        <input type="hidden" asp-for="Id" />                          @*here Model is default property represents the model passed to the view*@
+        <button type="submit" class="btn btn-danger me-2" onclick="return confirm('Are you sure to delete @Model.MovieName?')">Delete</button> 
+        <a asp-action="List" class="btn btn-secondary">Back to List</a>
+    </form>
+</div>

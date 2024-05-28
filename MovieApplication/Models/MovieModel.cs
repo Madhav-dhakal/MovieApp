@@ -9,7 +9,8 @@
         public string Director { get; set; } = string.Empty;
         public int Duration { get; set; }
         public string Genre { get; set; } = string.Empty;
-        public int Rating { get; set; }
+        public int Rating{ get; set; }
+         public string ImageUrl { get; set; }=string.Empty;
     }
 
 }

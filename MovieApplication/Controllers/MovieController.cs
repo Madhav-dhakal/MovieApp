@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieApplication.Data;
 using MovieApplication.Models;
@@ -74,11 +75,20 @@ namespace MovieApplication.Controllers
 
 
         // GET: Movie/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
+            // Retrieve the list of genres from the database
+            var genreList = await _context.GenreTable.ToListAsync();
+
+            // GenreId=indicates which property of the objects in genreList should be used as the value for each dropdown option.
+            //Name= indicates which property of the objects in genreList should be displayed as the text for each dropdown option.
+            //additional data field can be useful for filter or sort the dropdown options based on the provided field.
+            ViewBag.Genres = new SelectList(genreList, "GenreId", "Name");
+
+
             return View();
         }
-
         //Create
         [HttpPost]
         [ValidateAntiForgeryToken] // only used for post methods
@@ -86,17 +96,16 @@ namespace MovieApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Check if the movie name already exists in the database
+                // Check if the movie name already exists in the database(x.MovieName=database table data)
                 var existingMovie = await _context.MovieTable.Where(x => x.MovieName == movieModel.MovieName).ToListAsync();// FirstOrDefaultAsync=linq given by EF core
-
-
-                var genre =await _context.GenreTable.ToListAsync();
-
 
                 if (existingMovie != null && existingMovie.Count()>0)
                 {
                     // Movie name already exists, return a message
                     ViewBag.msg = "Cannot insert the same movie name twice.";
+                    var genre = await _context.GenreTable.ToListAsync();
+
+                    ViewBag.Genres = new SelectList(genre, "GenreId", "Name");
                     return View(movieModel);
                 }
                 else
@@ -108,6 +117,9 @@ namespace MovieApplication.Controllers
                     return RedirectToAction("List");
                 }
             }
+            var genreList = await _context.GenreTable.ToListAsync();
+            
+            ViewBag.Genres = new SelectList(genreList, "GenreId", "Name");
             return View(movieModel);
         }
 

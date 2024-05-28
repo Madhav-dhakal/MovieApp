@@ -5,7 +5,7 @@ using MovieApplication.Models;
 
 namespace MovieApplication.Controllers
 {
-    public class GenreController : Controller
+    public class GenreController : Controller //controller class contains viewBag,ViewData,modelstateetc.
     {
         private readonly MovieContext _context;
 
@@ -16,7 +16,7 @@ namespace MovieApplication.Controllers
 
         //Get: genre/list
         // Task is a type representing an asynchronous operation that produces a result of type void, i.e., it doesn't return a value. Without Task, you wouldn't be able to use await inside the method.
-        public async Task<IActionResult> Index()//IActionResult is an interface that represents the result or returntype of an action method.
+        public async Task<IActionResult> Index() //IActionResult is an interface that represents the result or returntype of an action method.
         {
           var data = await _context.GenreTable.ToListAsync();
             return View(data);
@@ -24,7 +24,7 @@ namespace MovieApplication.Controllers
         }
 
         //Get:Genre/Details/id=5
-        public async Task<IActionResult> Details(int ? id) // id can be int or null
+        public async Task<IActionResult> Details(int ? id) // id can be int or null 
         {
             if(id == null)
             {
@@ -39,11 +39,13 @@ namespace MovieApplication.Controllers
             return View(genre);
         }
 
+        //GET method displays the form, and the POST method processes the form submission.
         //Get:create
-        public IActionResult Create() {
+        public IActionResult Create()
+        {
             return View();
 
-                }
+        }
         //Post:create
         [HttpPost]
     public async Task<IActionResult> Create(GenreModel genre) {
@@ -56,6 +58,7 @@ namespace MovieApplication.Controllers
             return View(genre);
         }
 
+        //when we first open the edit page,browser sends a GET request to a URL like /Genre/Edit/5
         //Get:Edit/id
         public async Task<IActionResult> Edit(int ? id) {
             if (id == null)
@@ -63,6 +66,7 @@ namespace MovieApplication.Controllers
                 return NotFound();
             }
 
+            //searches for a single entity/row (record) in the database that matches the provided ID.
             var genre = await _context.GenreTable.FindAsync(id);
             if (genre == null)
             {
@@ -72,11 +76,12 @@ namespace MovieApplication.Controllers
             return View(genre);
         }
 
+        // POST method processes the form edit submission.
         //Post:Genre/Edit/Id=5
         [HttpPost]
         public async Task<IActionResult> Edit(int id, GenreModel genre)
-        {
-            if (id != genre.GenreId)
+        {                              //no two records in a table should have the same primary key
+            if (id != genre.GenreId) //compares the id provided by the user (usually from the URL) with the GenreId,represents the ID of the genre retrieved from the database.
             {
                 return NotFound();
             }

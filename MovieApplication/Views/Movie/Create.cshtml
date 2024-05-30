@@ -1,4 +1,4 @@
-﻿@model MovieModel
+﻿@model MovieViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -18,7 +18,7 @@
                 <div class="card-body">
                     <h4 class="card-title">Movie Details</h4>
                     <hr />
-                    <form asp-action="Create">
+                    <form asp-action="Create" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="mb-3">
                             <label asp-for="MovieName" class="form-label">Movie Name</label>
@@ -48,9 +48,9 @@
                             <span asp-validation-for="Genre" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label asp-for="ImageUrl" class="form-label">Image</label>
-                            <input asp-for="ImageUrl" type="file" class="form-control" />
-                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                            <label asp-for="Image" class="form-label">Image</label>
+                            <input asp-for="Image" class="form-control" />
+                            <span asp-validation-for="Image" class="text-danger"></span>
                         </div>
 
                         <div class="text-center">
@@ -65,7 +65,9 @@
 </div>
 
 @section Scripts {
+    @*include client-side validation scripts,ensures that necessary JavaScript files or scripts for form validation are loaded properly when the page is rendered.*@
+
     @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");  
     }
 }

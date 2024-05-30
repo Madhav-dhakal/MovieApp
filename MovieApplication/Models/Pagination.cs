@@ -1,4 +1,4 @@
-﻿namespace MovieApplication.Models
+﻿namespace MovieApplication.ViewModel
 {
     public class Pagination
     {

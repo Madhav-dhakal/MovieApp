@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MovieApplication.Models;
+using MovieApplication.ViewModel;
 namespace MovieApplication.Data
 {
     public class MovieContext : IdentityDbContext

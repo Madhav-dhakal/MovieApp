@@ -1,8 +1,8 @@
-﻿@model IEnumerable<MovieApplication.Models.MovieModel>
+﻿@model IEnumerable<responseModel>
 
 @{
     ViewData["Title"] = "List";
-    var pagination = ViewBag.Pagination as MovieApplication.Models.Pagination; // viewBag.pagination must match the model class Pagination data types.
+    var pagination = ViewBag.Pagination as MovieApplication.ViewModel.Pagination; // viewBag.pagination must match the model class Pagination data types.
 }
 
 <h1 class="text-center">List of Movies</h1>
@@ -20,6 +20,9 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Description) @*model is a parameter representing an instance of the model class.and points to the Name property of the Moviemodel class.*@
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Image)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Director)
@@ -43,6 +46,9 @@
                     </td>
                     <td>
                         @item.Description
+                    </td>
+                    <td>
+                        <img src="@item.Image" height="200"/>
                     </td>
                     <td>
                         @item.Director

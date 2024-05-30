@@ -8,6 +8,7 @@ H:\.net\MovieApplication\MovieApplication\bin\Debug\net8.0\MovieApplication.dll
 H:\.net\MovieApplication\MovieApplication\bin\Debug\net8.0\MovieApplication.pdb
 H:\.net\MovieApplication\MovieApplication\bin\Debug\net8.0\Azure.Core.dll
 H:\.net\MovieApplication\MovieApplication\bin\Debug\net8.0\Azure.Identity.dll
+H:\.net\MovieApplication\MovieApplication\bin\Debug\net8.0\CloudinaryDotNet.dll
 H:\.net\MovieApplication\MovieApplication\bin\Debug\net8.0\Humanizer.dll
 H:\.net\MovieApplication\MovieApplication\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
 H:\.net\MovieApplication\MovieApplication\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll

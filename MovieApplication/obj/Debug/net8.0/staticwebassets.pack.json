@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "H:\\.net\\MovieApplication\\MovieApplication\\wwwroot\\images\\blank-movie.jpg",
+      "PackagePath": "staticwebassets\\images\\blank-movie.jpg"
+    },
+    {
       "Id": "H:\\.net\\MovieApplication\\MovieApplication\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

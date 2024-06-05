@@ -10,6 +10,7 @@ using MovieApplication.Migrations;
 using MovieApplication.Models;
 using MovieApplication.ViewModel;
 using NuGet.Protocol.Core.Types;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace MovieApplication.Controllers
@@ -17,7 +18,7 @@ namespace MovieApplication.Controllers
     [Authorize]
     public class MovieController : Controller
     {
-        private readonly MovieContext _context; //for communication with db we create Moviecontext or ...
+        private readonly MovieContext _context; 
         private readonly Cloudinary _cloudinary;
         public MovieController(MovieContext context, Cloudinary cloudinary)
         {
@@ -26,70 +27,148 @@ namespace MovieApplication.Controllers
         }
 
         // GET: MovieList
-        public IActionResult List(int currentPg = 1) // if the parameter is not provided when the method is called, it will default to 1.
+        public IActionResult List(int currentPg = 1)
         {
-            // Retrieve the list of movies from the database
-           var data1 = _context.MovieTable.ToList(); // list must be of MoiveModel types deined in model class.
-
-
-           
-            
-            //showing 4 movies on each page.
             const int pageSize = 4;
 
-            // checks if the page number (pg) is less than 1. If it is, we set it to 1 because there is no page 0 or negative page.
             if (currentPg < 1)
             {
                 currentPg = 1;
             }
 
-            // Calculate the total number of items/movies in DB
-            int totalCount = data1.Count();
+            var data1 = _context.MovieTable.ToList();
 
-            // creating this "pagination" obj, we tell it how many movies we have, what page we're on, and how many movies should be on each page and it to
-            // Pagination constructor in model class.
+            // Map the data from MovieTable to MovieModelNew
+            List<MovieModelNew> movieList = data1.Select(item => new MovieModelNew
+            {
+                Id = item.Id,
+                MovieName = item.MovieName,
+                Director = item.Director,
+                Description = item.Description,
+                Duration = item.Duration,
+                Rating = item.Rating,
+                Genre = int.Parse(item.Genre),
+                Image = item.ImageUrl
+            }).ToList();
+
+            
+            int totalCount = movieList.Count();
             var pagination = new Pagination(totalCount, currentPg, pageSize);
-
-            // if we're on page 2, we skip the first 4 movies to start showing from the 5th movie
             int skip = (currentPg - 1) * pageSize;
 
-            //data1.Skip(skip) skips Movie A, B, C, D. from totalcollections
-            // After skipping the movies, the Take(pagination.PageSize) part tells the code to take the next PageSize number of movies.here it is 4 and
-            // takes the next 4 movies: Movie E, F, G, H..
-            var data = data1.Skip(skip).Take(pagination.PageSize).ToList();
+           
+            var paginatedMovies = movieList.Skip(skip).Take(pagination.PageSize).ToList();
 
-            List<responseModel> responseList = new List<responseModel>();
-            foreach(var item in data)
-            {
+            // Join paginated movies with genres
+            var query = (from movie in paginatedMovies
+                         join genre in _context.GenreTable
+                         on movie.Genre equals genre.GenreId
+                         select new responseModel
+                         {
+                             Id = movie.Id,
+                             MovieName = movie.MovieName,
+                             Description = movie.Description,
+                             Director = movie.Director,
+                             Duration = movie.Duration,
+                             Genre = genre.Name,
+                             Rating = movie.Rating,
+                             Image = movie.Image
+                         }).ToList();
 
-                var viewModel = new responseModel
-                {
-                    Id = item.Id,
-                    MovieName = item.MovieName,
-                    Description = item.Description,
-                    Director = item.Director,
-                    Duration = item.Duration,
-                    Genre = item.Genre,
-                    Rating = item.Rating,
-                   Image = item.ImageUrl,
-                };
-                responseList.Add(viewModel);
+            ViewBag.Pagination = pagination;
 
-            }
-
-
-          
-
-            // Pass the pagination object to the view so that pagination info will send to view for display
-            this.ViewBag.Pagination = pagination;
-
-            // Return the view with the paginated data
-            return View(responseList);
+            return View(query);
         }
 
 
+        //Http:Post/List
+        [HttpPost]
+        public IActionResult List(string SearchString, int currentPg = 1)
+        {
+            const int pageSize = 4;
+
+            if (currentPg < 1)
+            {
+                currentPg = 1;
+            }
+
+           
+            var data1 = _context.MovieTable.ToList();
+
+            
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                
+                data1 = data1.Where(x => x.MovieName.Contains(SearchString)).ToList();
+
+                // Map the search results to responseModel
+                var searchQuery = (from movie in data1
+                                   join genre in _context.GenreTable
+                                   on int.Parse(movie.Genre) equals genre.GenreId
+                                   select new responseModel
+                                   {
+                                       Id = movie.Id,
+                                       MovieName = movie.MovieName,
+                                       Description = movie.Description,
+                                       Director = movie.Director,
+                                       Duration = movie.Duration,
+                                       Genre = genre.Name,
+                                       Rating = movie.Rating,
+                                       Image = movie.ImageUrl
+                                   }).ToList();
+
+                // Return all search results without pagination
+                ViewBag.SearchString = SearchString;
+                return View(searchQuery);
+            }
+
+            // Map the data from MovieTable to MovieModelNew
+            List<MovieModelNew> movieList = data1.Select(item => new MovieModelNew
+            {
+                Id = item.Id,
+                MovieName = item.MovieName,
+                Director = item.Director,
+                Description = item.Description,
+                Duration = item.Duration,
+                Rating = item.Rating,
+                Genre = int.Parse(item.Genre),
+                Image = item.ImageUrl
+            }).ToList();
+
+           
+            int totalCount = movieList.Count();
+            var pagination = new Pagination(totalCount, currentPg, pageSize);
+            int skip = (currentPg - 1) * pageSize;
+
+            
+            var paginatedMovies = movieList.Skip(skip).Take(pagination.PageSize).ToList();
+
+            // Join paginated movies with genres
+            var query = (from movie in paginatedMovies
+                         join genre in _context.GenreTable
+                         on movie.Genre equals genre.GenreId
+                         select new responseModel
+                         {
+                             Id = movie.Id,
+                             MovieName = movie.MovieName,
+                             Description = movie.Description,
+                             Director = movie.Director,
+                             Duration = movie.Duration,
+                             Genre = genre.Name,
+                             Rating = movie.Rating,
+                             Image = movie.Image
+                         }).ToList();
+
+            ViewBag.Pagination = pagination;
+            ViewBag.SearchString = SearchString; // To retain the search string in the view
+
+            return View(query);
+        }
+
+
+
         // GET: Movie/Details/5
-        public async Task<IActionResult> Details(int? id) //  movie description
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -97,14 +176,58 @@ namespace MovieApplication.Controllers
             }
 
             var movieModel = await _context.MovieTable
+                .Include(m => m.Comments)
+                .Include(m => m.Ratings)  // Include ratings
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movieModel == null)
             {
                 return NotFound();
             }
 
+            ViewBag.AverageRating = movieModel.Ratings.Any() ? movieModel.Ratings.Average(r => r.RatingValue) : 0;
             return View(movieModel);
         }
+
+
+        // POST: Movie/AddReview
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddReview(int movieId, string reviewContent, int ratingValue)
+        {
+            if (string.IsNullOrEmpty(reviewContent))
+            {
+                ModelState.AddModelError("", "Review content cannot be empty.");
+            }
+
+            var movie = await _context.MovieTable.FindAsync(movieId);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            var comment = new Comment
+            {
+                MovieId = movieId,
+                UserName = User.Identity.Name, // Assuming the User.Identity.Name is used as the UserId
+                Content = reviewContent,
+                CreatedAt = DateTime.Now
+            };
+
+            var rating = new Ratings
+            {
+                MovieId = movieId,
+                UserName = User.Identity.Name,
+                RatingValue = ratingValue
+            };
+
+            _context.Comments.Add(comment);
+            _context.Ratings.Add(rating);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = movieId });
+        }
+
+
 
         // GET: Movie/Create
         [HttpGet]
@@ -164,7 +287,7 @@ namespace MovieApplication.Controllers
                         Description = ViewModel.Description,
                         Director = ViewModel.Director,
                         Duration = ViewModel.Duration,
-                        Genre = ViewModel.Genre,
+                        Genre =   ViewModel.Genre,
                         Rating = ViewModel.Rating,
                         ImageUrl = moviePath
                     };
@@ -179,7 +302,6 @@ namespace MovieApplication.Controllers
 
             return View();
         }
-
 
         // GET: Movie/Edit/5
         public async Task<IActionResult> Update(int? id)
@@ -207,7 +329,7 @@ namespace MovieApplication.Controllers
             vm.Director = movieModel.Director;
             vm.Duration = movieModel.Duration;
             vm.Rating = movieModel.Rating;
-            vm.Genre = movieModel.Genre;
+            vm.Genre = movieModel.Genre.ToString();
             Path= movieModel.ImageUrl;
 
            
@@ -226,7 +348,7 @@ namespace MovieApplication.Controllers
                 
                 var genre = await _context.GenreTable.ToListAsync();
 
-                ViewBag.Genres = new SelectList(genre, "GenreId", "Name");
+                
                
                 try
                 {

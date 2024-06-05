@@ -112,8 +112,8 @@ namespace MovieApplication.Areas.Identity.Pages.Account
 
             [Required]
             [Display(Name = "Phone")]
-            [RegularExpression(@"^\+?\d+$", ErrorMessage = "Invalid phone number")]
-            public int Phone { get; set; }
+            [RegularExpression(@"^\d{10}$", ErrorMessage = "Invalid phone number")]
+            public string Phone { get; set; }
 
             [Required]
             public ProductStatus Role { get; set; } = ProductStatus.user;

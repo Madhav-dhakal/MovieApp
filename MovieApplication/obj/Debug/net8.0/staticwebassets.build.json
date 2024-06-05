@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "8XGDfb0JyDjFMeSBXNadGqIdT8OLVPA6St1hnOxOOe8=",
+  "Hash": "5jV3R5W8covinxJF4HXhMs8SiqWwAUzxSYsYo83H/Rc=",
   "Source": "MovieApplication",
   "BasePath": "_content/MovieApplication",
   "Mode": "Default",
@@ -1231,6 +1231,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "H:\\.net\\MovieApplication\\MovieApplication\\wwwroot\\images\\blank-movie.jpg",
+      "SourceId": "MovieApplication",
+      "SourceType": "Discovered",
+      "ContentRoot": "H:\\.net\\MovieApplication\\MovieApplication\\wwwroot\\",
+      "BasePath": "_content/MovieApplication",
+      "RelativePath": "images/blank-movie.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\blank-movie.jpg"
     },
     {
       "Identity": "H:\\.net\\MovieApplication\\MovieApplication\\wwwroot\\js\\site.js",

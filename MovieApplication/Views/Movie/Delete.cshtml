@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "Delete";
+
+    int totalMinutes = Model.Duration;
+    int hours = totalMinutes / 60;
+    int minutes = totalMinutes % 60;
 }
 
 <h1 class="text-center">Delete</h1>
@@ -24,7 +28,10 @@
                 <dd class="col-sm-9">@Html.DisplayFor(model => model.Director)</dd>
 
                 <dt class="col-sm-3">Duration</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Duration)</dd>
+                <dd class="col-sm-9">
+                    @hours hr @minutes min
+
+                </dd>
 
                 <dt class="col-sm-3">Genre</dt>
                 <dd class="col-sm-9">@Html.DisplayFor(model => model.Genre)</dd>

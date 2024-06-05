@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using MovieApplication.Models;
 
 namespace MovieApplication.ViewModel
 {
@@ -22,10 +23,12 @@ namespace MovieApplication.ViewModel
         public string Description { get; set; } = string.Empty;
         public string Director { get; set; } = string.Empty;
         public int Duration { get; set; }
-        public string Genre { get; set; } = string.Empty;
-        public int Rating { get; set; }
+        public string Genre { get; set; }
+        public double Rating { get; set; }
         public string Image { get; set; }
+        public List<Ratings> Ratings { get; set; } = new List<Ratings>();
     }
-
-
 }
+
+
+

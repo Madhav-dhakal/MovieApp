@@ -1,8 +1,86 @@
-﻿@{
+﻿@model IEnumerable<MovieApplication.ViewModel.responseModel>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <h1 class="text-center mb-5">Movie Collection</h1>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        @foreach (var movie in Model)
+        {
+            var hours = movie.Duration / 60;
+            var minutes = movie.Duration % 60;
+            var imageUrl = string.IsNullOrEmpty(movie.Image) ? "/images/blank-movie.jpg" : movie.Image;
+
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <a href="@Url.Action("Details", "Movie", new { id = movie.Id })">
+                        <img class="card-img-top" src="@imageUrl" alt="Movie Image" style="height: 250px; object-fit: cover;">
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary">@movie.MovieName</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@movie.Genre</h6>
+                        <p class="card-text">
+                            <strong>Director:</strong> @movie.Director<br />
+                            <strong>Duration:</strong> @hours hr @minutes min
+                        </p>
+                        <div class="rating mb-2">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                var averageRating = movie.Rating;
+                                if (i <= averageRating)
+                                {
+                                    <i class="fas fa-star text-warning"></i>
+                                }
+                                else
+                                {
+                                    <i class="far fa-star text-warning"></i>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+
+<style>
+    .container {
+        max-width: 1200px;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+    }
+
+    .card-subtitle {
+        font-size: 1rem;
+    }
+
+    .card-text {
+        font-size: 0.875rem;
+    }
+
+    .rating {
+        display: flex;
+    }
+
+    .fa-star {
+        font-size: 1.25rem;
+        color: #ccc;
+    }
+
+        .fa-star.checked {
+            color: #ffcc00;
+        }
+
+    .card-img-top {
+        transition: transform 0.2s ease-in-out;
+    }
+
+        .card-img-top:hover {
+            transform: scale(1.05);
+        }
+</style>

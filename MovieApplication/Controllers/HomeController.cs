@@ -4,7 +4,6 @@ using MovieApplication.ViewModel;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using MovieApplication.Data;
-using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,16 +11,14 @@ namespace MovieApplication.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly MovieContext _context;
 
-        public HomeController(ILogger<HomeController> logger, MovieContext context)
+        public HomeController(MovieContext context)
         {
-            _logger = logger;
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchQuery)
         {
             var movies = await _context.MovieTable
                 .Include(m => m.Ratings)
@@ -39,14 +36,16 @@ namespace MovieApplication.Controllers
                                  Duration = movie.Duration,
                                  Genre = genre.Name,
                                  Image = movie.ImageUrl,
-
                                  Rating = movie.Ratings.Any() ? movie.Ratings.Average(r => r.RatingValue) : 0.0
                              }).ToList();
 
-           
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                movieList = movieList.Where(m => m.MovieName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
             double overallAverageRating = movieList.Any() ? movieList.Average(m => m.Rating) : 0.0;
 
-            
             ViewBag.averageRating = overallAverageRating;
 
             return View(movieList);

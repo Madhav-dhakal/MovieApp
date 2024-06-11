@@ -226,6 +226,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVcTGlzdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[H:/.net/MovieApplication/MovieApplication/Views/Movie/Reviews.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVcUmV2aWV3cy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [H:/.net/MovieApplication/MovieApplication/Views/Movie/Update.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTW92aWVcVXBkYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

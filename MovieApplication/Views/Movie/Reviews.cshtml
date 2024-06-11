@@ -1,0 +1,202 @@
+﻿@model MovieApplication.Models.MovieModel
+
+@{
+    ViewData["Title"] = "Reviews";
+}
+
+<style>
+    .initial-circle {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #007bff;
+        color: #fff;
+        text-align: center;
+        line-height: 30px;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    .card-title {
+        margin-bottom: 0;
+        color: #007bff;
+    }
+</style>
+
+<div class="mt-4">
+    <div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="card mt-4">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h5 class="mb-0 text-center">Give a Review</h5>
+                    </div>
+
+                    <div class="form-group float-end">
+                        <div id="rating" class="star-rating">
+                            <i class="far fa-star text-warning" data-value="1"></i>
+                            <i class="far fa-star text-warning" data-value="2"></i>
+                            <i class="far fa-star text-warning" data-value="3"></i>
+                            <i class="far fa-star text-warning" data-value="4"></i>
+                            <i class="far fa-star text-warning" data-value="5"></i>
+                        </div>
+                       
+                    </div>
+                    <form id="reviewForm" asp-action="Reviews" method="post">
+                        <input type="hidden" name="movieId" value="@Model.Id" />
+                        <div class="form-group">
+                            <textarea class="form-control" name="reviewContent" id="reviewContent" rows="4" placeholder="Leave your review here..."></textarea>
+                        </div>
+                        <input type="hidden" name="ratingValue" id="ratingValue" value="0" />
+                        <br />
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-paper-plane"></i> Submit Review
+                        </button>
+                    </form>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p class="mt-3">Please <a href="/Account/Login">login</a> to leave a review.</p>
+        }
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            @if (Model.Reviews.Any())
+            {
+                <h5 class="card-title text-center">Users Reviews</h5>
+                <hr />
+
+                @foreach (var comment in Model.Reviews)
+                {
+                    <div class="mb-3 review-item">
+                        @if (!string.IsNullOrEmpty(comment.UserName))
+                        {
+                            <div class="d-flex align-items-center">
+                                <span class="initial-circle mr-2">@comment.UserName.Substring(0, 1).ToUpper()</span>
+                                <h6 class="card-subtitle mb-2 text-muted"> <span class="ml-2"> <span id="time-ago-@(comment.Id)"></span></span></h6>
+                            </div>
+                            <div class="form-group">
+                                <div class="star-rating read-only">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= comment.Rating)
+                                        {
+                                            <i class="fas fa-star text-warning"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="far fa-star text-warning"></i>
+                                        }
+                                    }
+                                </div>
+                            </div>
+
+                            <script>
+                                $(document).ready(function () {
+                                    var date = new Date("@comment.CreatedAt");
+                                    var timeAgo = getTimeAgo(date);
+                                    $("#time-ago-@(comment.Id)").text(timeAgo);
+                                });
+
+                                function getTimeAgo(date) {
+                                    var seconds = Math.floor((new Date() - date) / 1000);
+
+                                    var interval = Math.floor(seconds / 31536000);
+                                    if (interval >= 1) {
+                                        return interval + " year" + (interval === 1 ? "" : "s") + " ago";
+                                    }
+                                    interval = Math.floor(seconds / 2592000);
+                                    if (interval >= 1) {
+                                        return interval + " month" + (interval === 1 ? "" : "s") + " ago";
+                                    }
+                                    interval = Math.floor(seconds / 86400);
+                                    if (interval >= 1) {
+                                        return interval + " day" + (interval === 1 ? "" : "s") + " ago";
+                                    }
+                                    interval = Math.floor(seconds / 3600);
+                                    if (interval >= 1) {
+                                        return interval + " hour" + (interval === 1 ? "" : "s") + " ago";
+                                    }
+                                    interval = Math.floor(seconds / 60);
+                                    if (interval >= 1) {
+                                        return interval + " minute" + (interval === 1 ? "" : "s") + " ago";
+                                    }
+                                    return Math.floor(seconds) + " second" + (seconds === 1 ? "" : "s") + " ago";
+                                }
+                            </script>
+                        }
+                        <p class="card-text mt-2">@comment.Content</p>
+                    </div>
+
+                    <br />
+                }
+                <hr id="reviewsSeparator" />
+
+                @if (Model.Reviews.Count > 10)
+                {
+                    <div class="text-center mt-2">
+                        <button type="button" id="showAllButton" class="btn btn-link text-decoration-none">Show All</button>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="card-text">No reviews yet. Be the first to leave a review!</p>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#reviewsSeparator").show();
+
+            $("#showAllButton").click(function () {
+                $(".review-item").show();
+                $(this).hide();
+                $("#reviewsSeparator").hide();
+            });
+        });
+
+        // Star rating logic
+        $(document).ready(function () {
+            function updateStars(value) {
+                $('#rating .far').removeClass('fas').addClass('far');
+                if (value) {
+                    $('#rating .far[data-value="' + value + '"]').addClass('fas').prevAll('.far').addClass('fas');
+                }
+            }
+
+            // Initially set the rating based on the hidden input value
+            updateStars($('#ratingValue').val());
+
+            $('#rating .far').hover(function () {
+                console.log("Mouse enter");
+                var value = $(this).data('value');
+                $('#rating .far').removeClass('fas').addClass('far');
+                $(this).addClass('fas').prevAll('.far').addClass('fas');
+            });
+
+            $('#rating .far').click(function () {
+                console.log("Clicked");
+                var value = $(this).data('value');
+                $('#ratingValue').val(value);
+                $('#rating .far').removeClass('fas').addClass('far');
+                $(this).addClass('fas').prevAll('.far').addClass('fas');
+            });
+
+            $('#rating').mouseleave(function () {
+                console.log("Mouse leave");
+                var value = $('#ratingValue').val();
+                updateStars(value);
+            });
+        });
+    </script>
+}

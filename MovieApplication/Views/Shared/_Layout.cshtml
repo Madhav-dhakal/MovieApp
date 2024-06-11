@@ -4,11 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MovieApplication</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MovieApplication.styles.css" asp-append-version="true" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"> </script>
     <style>
+        
         
         .navbar-brand {
             font-size: 1.8rem;
@@ -94,9 +98,6 @@
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Movie" asp-action="Create">Add Movie</a>
                         </li>
                         <li class="nav-item">
@@ -112,14 +113,17 @@
                     {
                         string name = parts[0].Trim();
                         
-                        string firstLetter = name.Substring(0, 1).ToUpper(); 
-                        <button class="login-button me-3">
-                            <div >
-                                @firstLetter
-                            </div>
-                        </button>
+                        string firstLetter = name.Substring(0, 1).ToUpper();
+                        <form asp-area="Identity" asp-page="/Account/Manage/Index" method="get" asp-route-returnUrl="@Url.Page("/Account/Manage/Index", new { area = "" })">
+                            <button type="submit" class="login-button me-3">
+                                <div>
+                                    @firstLetter
+                                </div>
+                            </button>
+                        </form>
                     }
                 }
+                
                 @if (User.Identity?.IsAuthenticated ?? false)
                 {
                     <form  asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
@@ -127,9 +131,8 @@
                 </form>
                 }
                 else
-               {
-                   
-                    <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                {
+                        <a id="manage" class="btn btn-primary" title="Manage" asp-area="Identity" asp-page="/Account/Login">Login</a>
                 }
             </div>
             

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieApplication.Data;
 
@@ -11,9 +12,11 @@ using MovieApplication.Data;
 namespace MovieApplication.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    partial class MovieContextModelSnapshot : ModelSnapshot
+    [Migration("20240606093212_UserId")]
+    partial class UserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,6 +227,37 @@ namespace MovieApplication.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("MovieApplication.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MovieModelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieModelId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("MovieApplication.Models.GenreModel", b =>
                 {
                     b.Property<int>("GenreId")
@@ -298,51 +332,14 @@ namespace MovieApplication.Migrations
                     b.Property<int>("RatingValue")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MovieModelId");
 
                     b.ToTable("Ratings");
-                });
-
-            modelBuilder.Entity("MovieApplication.Models.ReviewModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MovieId");
-
-                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -396,6 +393,13 @@ namespace MovieApplication.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MovieApplication.Models.Comment", b =>
+                {
+                    b.HasOne("MovieApplication.Models.MovieModel", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("MovieModelId");
+                });
+
             modelBuilder.Entity("MovieApplication.Models.Ratings", b =>
                 {
                     b.HasOne("MovieApplication.Models.MovieModel", null)
@@ -403,22 +407,11 @@ namespace MovieApplication.Migrations
                         .HasForeignKey("MovieModelId");
                 });
 
-            modelBuilder.Entity("MovieApplication.Models.ReviewModel", b =>
-                {
-                    b.HasOne("MovieApplication.Models.MovieModel", "Movie")
-                        .WithMany("Reviews")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Movie");
-                });
-
             modelBuilder.Entity("MovieApplication.Models.MovieModel", b =>
                 {
-                    b.Navigation("Ratings");
+                    b.Navigation("Comments");
 
-                    b.Navigation("Reviews");
+                    b.Navigation("Ratings");
                 });
 #pragma warning restore 612, 618
         }

@@ -27,6 +27,7 @@ namespace MovieApplication.ViewModel
         public double Rating { get; set; }
         public string Image { get; set; }
         public List<Ratings> Ratings { get; set; } = new List<Ratings>();
+        public List<ReviewModel> Reviews { get; set; } = new List<ReviewModel>();
     }
 }
 

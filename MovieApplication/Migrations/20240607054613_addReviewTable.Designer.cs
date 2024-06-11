@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MovieApplication.Data;
 
@@ -11,9 +12,11 @@ using MovieApplication.Data;
 namespace MovieApplication.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    partial class MovieContextModelSnapshot : ModelSnapshot
+    [Migration("20240607054613_addReviewTable")]
+    partial class addReviewTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -327,20 +330,16 @@ namespace MovieApplication.Migrations
                     b.Property<int>("MovieId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Rating")
+                    b.Property<int?>("MovieModelId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("MovieId");
+                    b.HasIndex("MovieModelId");
 
                     b.ToTable("Reviews");
                 });
@@ -405,13 +404,9 @@ namespace MovieApplication.Migrations
 
             modelBuilder.Entity("MovieApplication.Models.ReviewModel", b =>
                 {
-                    b.HasOne("MovieApplication.Models.MovieModel", "Movie")
+                    b.HasOne("MovieApplication.Models.MovieModel", null)
                         .WithMany("Reviews")
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Movie");
+                        .HasForeignKey("MovieModelId");
                 });
 
             modelBuilder.Entity("MovieApplication.Models.MovieModel", b =>

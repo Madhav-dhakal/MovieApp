@@ -5,42 +5,65 @@
 
 <div class="container mt-5">
     <h1 class="text-center mb-5">Movie Collection</h1>
-    <div class="row row-cols-1 row-cols-md-4 g-4">
-        @foreach (var movie in Model)
-        {
-            var hours = movie.Duration / 60;
-            var minutes = movie.Duration % 60;
-            var imageUrl = string.IsNullOrEmpty(movie.Image) ? "/images/blank-movie.jpg" : movie.Image;
 
-            <div class="col">
-                <div class="card h-100 shadow-sm">
-                    <a href="@Url.Action("Details", "Movie", new { id = movie.Id })">
-                        <img class="card-img-top" src="@imageUrl" alt="Movie Image" style="height: 250px; object-fit: cover;">
-                    </a>
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title text-primary">@movie.MovieName</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">@movie.Genre</h6>
-                        <p class="card-text">
-                            <strong>Director:</strong> @movie.Director<br />
-                            <strong>Duration:</strong> @hours hr @minutes min
-                        </p>
-                        <div class="rating mb-2">
-                            @for (int i = 1; i <= 5; i++)
-                            {
-                                var averageRating = movie.Rating;
-                                if (i <= averageRating)
+    <form asp-action="Index" method="get" class="mb-4">
+        <div class="row justify-content-end">
+            <div class="col-md-12 col-sm-12">
+                <div class="input-group">
+                    <input type="text" name="searchQuery" class="form-control rounded-1 me-2" placeholder="Search Movie" value="@Context.Request.Query["searchQuery"]" />
+                    <button type="submit" class="btn btn-primary rounded-2"><i class="fas fa-search"></i>Search</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        @if (!Model.Any())
+        {
+            <div class="col text-center">
+                <div class="alert alert-info " role="alert">
+                   Seach Not Found.
+                </div>
+            </div>
+        }
+        else
+        {
+            @foreach (var movie in Model)
+            {
+                var hours = movie.Duration / 60;
+                var minutes = movie.Duration % 60;
+                var imageUrl = string.IsNullOrEmpty(movie.Image) ? "/images/blank-movie.jpg" : movie.Image;
+
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <a href="@Url.Action("Details", "Movie", new { id = movie.Id })">
+                            <img class="card-img-top" src="@imageUrl" alt="Movie Image" style="height: 250px; object-fit: cover;">
+                        </a>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-primary">@movie.MovieName</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">@movie.Genre</h6>
+                            <p class="card-text">
+                                <strong>Director:</strong> @movie.Director<br />
+                                <strong>Duration:</strong> @hours hr @minutes min
+                            </p>
+                            <div class="rating mb-2">
+                                @for (int i = 1; i <= 5; i++)
                                 {
-                                    <i class="fas fa-star text-warning"></i>
+                                    var averageRating = movie.Rating;
+                                    if (i <= averageRating)
+                                    {
+                                        <i class="fas fa-star text-warning"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="far fa-star text-warning"></i>
+                                    }
                                 }
-                                else
-                                {
-                                    <i class="far fa-star text-warning"></i>
-                                }
-                            }
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
         }
     </div>
 </div>

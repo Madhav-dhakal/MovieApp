@@ -1,16 +1,13 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieApplication.Data;
-using MovieApplication.Migrations;
 using MovieApplication.Models;
 using MovieApplication.ViewModel;
-using NuGet.Protocol.Core.Types;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Security.Claims;
 
 
 namespace MovieApplication.Controllers
@@ -165,8 +162,6 @@ namespace MovieApplication.Controllers
             return View(query);
         }
 
-
-
         // GET: Movie/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -175,28 +170,70 @@ namespace MovieApplication.Controllers
                 return NotFound();
             }
 
+            // Fetch movies and genres from the database
+            var movies = await _context.MovieTable.ToListAsync();
+            var genres = await _context.GenreTable.ToListAsync();
+
+            // Perform the join in memory
+            var movieDetail = (from movie in movies
+                               join genre in genres
+                               on movie.Genre equals genre.GenreId.ToString()
+                               where movie.Id == id
+                               select new responseModel
+                               {
+                                   Id = movie.Id,
+                                   MovieName = movie.MovieName,
+                                   Description = movie.Description,
+                                   Director = movie.Director,
+                                   Duration = movie.Duration,
+                                   Genre = genre.Name,
+                                   Rating = movie.Rating,
+                                   Image = movie.ImageUrl
+                               }).FirstOrDefault();
+
+            if (movieDetail == null)
+            {
+                return NotFound();
+            }
+
+            return View(movieDetail);
+
+        }
+
+
+
+        //Get:Review
+        public async Task<IActionResult> Reviews(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             var movieModel = await _context.MovieTable
-                .Include(m => m.Comments)
-                .Include(m => m.Ratings)  // Include ratings
+                .Include(m => m.Reviews)
+                .Include(m => m.Ratings)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (movieModel == null)
             {
                 return NotFound();
             }
 
             ViewBag.AverageRating = movieModel.Ratings.Any() ? movieModel.Ratings.Average(r => r.RatingValue) : 0;
+            ViewBag.LoggedInUserName = User.Identity.Name;
+
             return View(movieModel);
         }
 
-
-        // POST: Movie/AddReview
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddReview(int movieId, string reviewContent, int ratingValue)
+        public async Task<IActionResult> Reviews(int movieId, string reviewContent, int ratingValue)
         {
             if (string.IsNullOrEmpty(reviewContent))
             {
                 ModelState.AddModelError("", "Review content cannot be empty.");
+                return RedirectToAction("Reviews", new { id = movieId });
             }
 
             var movie = await _context.MovieTable.FindAsync(movieId);
@@ -205,26 +242,31 @@ namespace MovieApplication.Controllers
                 return NotFound();
             }
 
-            var comment = new Comment
+            string loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string loggedInUserName = User.Identity.Name;
+
+            var comment = new ReviewModel
             {
                 MovieId = movieId,
-                UserName = User.Identity.Name, // Assuming the User.Identity.Name is used as the UserId
+                UserId = loggedInUserId,
+                UserName = loggedInUserName,
                 Content = reviewContent,
+                Rating=ratingValue,
                 CreatedAt = DateTime.Now
             };
 
             var rating = new Ratings
             {
                 MovieId = movieId,
-                UserName = User.Identity.Name,
+                UserId = loggedInUserId,
                 RatingValue = ratingValue
             };
 
-            _context.Comments.Add(comment);
+            _context.Reviews.Add(comment);
             _context.Ratings.Add(rating);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Details), new { id = movieId });
+            return RedirectToAction("Reviews", new { id = movieId });
         }
 
 

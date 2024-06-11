@@ -10,6 +10,7 @@ H:\.net\MovieApplication\MovieApplication\obj\Debug\net8.0\MovieApplication.Razo
 H:\.net\MovieApplication\MovieApplication\obj\Debug\net8.0\MovieApplication.sourcelink.json
 H:\.net\MovieApplication\MovieApplication\bin\Debug\net8.0\appsettings.Development.json
 H:\.net\MovieApplication\MovieApplication\bin\Debug\net8.0\appsettings.json
+H:\.net\MovieApplication\MovieApplication\bin\Debug\net8.0\bundleconfig.json
 H:\.net\MovieApplication\MovieApplication\bin\Debug\net8.0\MovieApplication.staticwebassets.runtime.json
 H:\.net\MovieApplication\MovieApplication\bin\Debug\net8.0\MovieApplication.exe
 H:\.net\MovieApplication\MovieApplication\bin\Debug\net8.0\MovieApplication.deps.json

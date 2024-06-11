@@ -11,55 +11,24 @@
     <meta charset="UTF-8">
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 20px;
-            background: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 8px;
-        }
-
-        .alert-warning {
-            color: #856404;
-            background-color: #fff3cd;
-            border-color: #ffeeba;
-        }
-
-        .btn-delete {
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-
-            .btn-delete:hover {
-                background-color: #c82333;
-                border-color: #bd2130;
-            }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <h3 class="text-center">@ViewData["Title"]</h3>
+    <div class="container mt-5">
+        <h3 class="text-center mb-4">@ViewData["Title"]</h3>
         <div class="alert alert-warning text-center" role="alert">
             <strong>Warning:</strong> Deleting this data will permanently remove your account. This action cannot be undone.
         </div>
-        <form id="delete-user" method="post">
+        <form id="delete-user" method="post" class="mt-4">
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             @if (Model.RequirePassword)
             {
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" placeholder="Password" required>
-                    <label asp-for="Input.Password">Password</label>
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" autocomplete="current-password" required>
+                    <div class="invalid-feedback">Please enter your password.</div>
                 </div>
             }
-            <button class="btn btn-delete w-100" type="submit">Delete Data and Close My Account</button>
+            <button class="btn btn-danger w-100" type="submit">Delete Data and Close My Account</button>
         </form>
     </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>

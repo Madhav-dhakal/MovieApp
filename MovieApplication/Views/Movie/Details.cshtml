@@ -1,128 +1,73 @@
-﻿@model MovieApplication.Models.MovieModel
+﻿@model MovieApplication.ViewModel.responseModel
 @{
     ViewData["Title"] = "Details";
     int totalMinutes = Model.Duration;
     int hours = totalMinutes / 60;
     int minutes = totalMinutes % 60;
-
 }
 
 <h1 class="text-center">Movie Details</h1>
 
 <div class="container mt-4">
     <div class="card shadow-sm">
-        <div class="card-body">
-            <h4 class="card-title">Movie Information</h4>
-            <hr />
-            <dl class="row">
-                <dt class="col-sm-3">Movie Name</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.MovieName)</dd>
-
-                <dt class="col-sm-3">Description</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
-
-                <dt class="col-sm-3">Director</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Director)</dd>
-
-                <dt class="col-sm-3">Duration</dt>
-                <dd class="col-sm-9">
-                    @hours hr @minutes min
-                    
-                </dd>
-                    
-
-                <dt class="col-sm-3">Genre</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(model => model.Genre)</dd>
-
-                <dt class="col-sm-3">Rating</dt>
-                <dd class="col-sm-9">
-                    <div class="rating">
-                        @{
-                            double averageRating = ViewBag.averageRating ?? 0.0; 
-                        }
-                        @for (int i = 1; i <= 5; i++)
-                        {
-                            if (i <= averageRating)
-                            {
-                                <span class="fa fa-star checked"></span>
-                            }
-                            else
-                            {
-                                <span class="fa fa-star"></span>
-                            }
-                        }
-                    </div>
-                </dd>
-            </dl>
-        </div>
-    </div>
-
-    <div class="mt-4">
-        <h4>Comments</h4>
-        <hr />
-        <div id="comments">
-            @foreach (var comment in Model.Comments)
-            {
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <p>@comment.Content</p>
-                        <small>Posted by: @comment.UserName on @comment.CreatedAt</small>
-                    </div>
-                </div>
-            }
-        </div>
-
-        @if (User.Identity.IsAuthenticated)
-        {
-            <div class="card mt-4">
-                <div class="card-body">
-                    <h5 class="card-title">Leave a Review</h5>
-                    <form id="reviewForm" asp-action="AddReview" method="post">
-                        <input type="hidden" name="movieId" value="@Model.Id" />
-                        <div class="form-group">
-                            <label for="reviewContent">Review</label>
-                            <textarea class="form-control" name="reviewContent" id="reviewContent" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="ratingValue">Rating</label>
-                            <div class="rating" id="ratingStars">
-                                @for (int i = 1; i <= 5; i++)
-                                {
-                                    <span class="fa fa-star" data-value="@i"></span>
-                                }
-                            </div>
-                            <input type="hidden" name="ratingValue" id="ratingValue" />
-                        </div>
-                        <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
-                    </form>
+        <div class="row g-0">
+            <div class="col-md-3">
+                <div class="d-flex align-items-center justify-content-center h-90">
+                    @if (!string.IsNullOrEmpty(Model.Image))
+                    {
+                        <img src="@Model.Image" alt="Movie Image" class="img-fluid h-80" />
+                    }
+                    else
+                    {
+                        <p class="text-center">No image available</p>
+                    }
                 </div>
             </div>
-        }
-        else
-        {
-            <p class="mt-3">Please <a href="/Account/Login">login</a> to leave a review.</p>
-        }
+            <div class="col-md-9">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Movie Information</h4>
+                        <div>
+                            <a asp-action="Update" asp-route-id="@Model?.Id" class="btn btn-warning me-2">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a asp-action="List" class="btn btn-secondary">
+                                <i class="fa fa-arrow-left"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-3">Movie Name</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.MovieName)</dd>
+
+                        <dt class="col-sm-3">Description</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
+
+                        <dt class="col-sm-3">Director</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Director)</dd>
+
+                        <dt class="col-sm-3">Duration</dt>
+                        <dd class="col-sm-9">@hours hr @minutes min</dd>
+
+                        <dt class="col-sm-3">Genre</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Genre)</dd> <!-- Display the genre name -->
+                    </dl>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="text-center mt-4">
-    <a asp-action="Update" asp-route-id="@Model?.Id" class="btn btn-warning me-2">Update</a>
-    <a asp-action="List" class="btn btn-secondary">Back to List</a>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a asp-action="Reviews" asp-route-id="@Model?.Id" class="btn btn-success">
+            <i class="fa fa-comment"></i> Leave Review
+        </a>
+    }
+    else
+    {
+        <p>Please <a href="/Account/Login">login</a> to leave a review.</p>
+    }
 </div>
-
-@section scripts {
-    <script>
-        // Add event listener to stars for rating selection
-        document.querySelectorAll('.rating .fa-star').forEach(star => {
-            star.addEventListener('click', function () {
-                let value = parseInt(this.getAttribute('data-value'));
-                document.getElementById('ratingValue').value = value;
-                // Highlight selected stars
-                document.querySelectorAll('.rating .fa-star').forEach(s => s.classList.remove('checked'));
-                for (let i = 1; i <= value; i++) {
-                    document.querySelector(`.rating .fa-star[data-value='${i}']`).classList.add('checked');
-                }
-            });
-        });
-    </script>
-}

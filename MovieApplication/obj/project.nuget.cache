@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ck3ed05wkh77ToGde4S/03YmCScmBL/5wlvwCAp3T/2mB8r8qRBiAjc55h9FAxU/+V2NW6J62qHpQVjwbv8OEg==",
+  "dgSpecHash": "xcZbmGPUMJuQKdL4/RMDy1Si5mqymOCtBlVnm6npo4YBbOXVbHLMRu8KNlL+etgyld5z2UMMCEKlcKKIsx1rmA==",
   "success": true,
   "projectFilePath": "H:\\.net\\MovieApplication\\MovieApplication\\MovieApplication.csproj",
   "expectedPackageFiles": [
@@ -57,6 +57,9 @@
     "C:\\Users\\madha\\.nuget\\packages\\humanizer.core.zh-cn\\2.14.1\\humanizer.core.zh-cn.2.14.1.nupkg.sha512",
     "C:\\Users\\madha\\.nuget\\packages\\humanizer.core.zh-hans\\2.14.1\\humanizer.core.zh-hans.2.14.1.nupkg.sha512",
     "C:\\Users\\madha\\.nuget\\packages\\humanizer.core.zh-hant\\2.14.1\\humanizer.core.zh-hant.2.14.1.nupkg.sha512",
+    "C:\\Users\\madha\\.nuget\\packages\\jquery\\3.7.1\\jquery.3.7.1.nupkg.sha512",
+    "C:\\Users\\madha\\.nuget\\packages\\jquery.validation\\1.20.0\\jquery.validation.1.20.0.nupkg.sha512",
+    "C:\\Users\\madha\\.nuget\\packages\\jquery.validation.unobtrusive\\2.0.20710\\jquery.validation.unobtrusive.2.0.20710.nupkg.sha512",
     "C:\\Users\\madha\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\8.0.5\\microsoft.aspnetcore.cryptography.internal.8.0.5.nupkg.sha512",
     "C:\\Users\\madha\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\8.0.5\\microsoft.aspnetcore.cryptography.keyderivation.8.0.5.nupkg.sha512",
     "C:\\Users\\madha\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\8.0.5\\microsoft.aspnetcore.identity.entityframeworkcore.8.0.5.nupkg.sha512",
@@ -113,6 +116,7 @@
     "C:\\Users\\madha\\.nuget\\packages\\microsoft.identitymodel.protocols\\6.35.0\\microsoft.identitymodel.protocols.6.35.0.nupkg.sha512",
     "C:\\Users\\madha\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\6.35.0\\microsoft.identitymodel.protocols.openidconnect.6.35.0.nupkg.sha512",
     "C:\\Users\\madha\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.35.0\\microsoft.identitymodel.tokens.6.35.0.nupkg.sha512",
+    "C:\\Users\\madha\\.nuget\\packages\\microsoft.jquery.unobtrusive.validation\\2.0.20710\\microsoft.jquery.unobtrusive.validation.2.0.20710.nupkg.sha512",
     "C:\\Users\\madha\\.nuget\\packages\\microsoft.net.stringtools\\17.8.3\\microsoft.net.stringtools.17.8.3.nupkg.sha512",
     "C:\\Users\\madha\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\madha\\.nuget\\packages\\microsoft.netcore.targets\\1.1.3\\microsoft.netcore.targets.1.1.3.nupkg.sha512",
@@ -224,5 +228,16 @@
     "C:\\Users\\madha\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\madha\\.nuget\\packages\\system.windows.extensions\\7.0.0\\system.windows.extensions.7.0.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "jQuery.Validation.Unobtrusive 2.0.20710 depends on Microsoft.jQuery.Unobtrusive.Validation (>= 2.0.20613) but Microsoft.jQuery.Unobtrusive.Validation 2.0.20613 was not found. An approximate best match of Microsoft.jQuery.Unobtrusive.Validation 2.0.20710 was resolved.",
+      "libraryId": "Microsoft.jQuery.Unobtrusive.Validation",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

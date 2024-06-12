@@ -12,6 +12,7 @@ namespace MovieApplication.ViewModel
         public int Duration { get; set; }
         public string Genre { get; set; } = string.Empty;
         public int Rating { get; set; }
+        public IFormFile? Movie { get; set; } 
         public  IFormFile? Image { get; set; }
       
     }
@@ -28,6 +29,7 @@ namespace MovieApplication.ViewModel
         public string Image { get; set; }
         public List<Ratings> Ratings { get; set; } = new List<Ratings>();
         public List<ReviewModel> Reviews { get; set; } = new List<ReviewModel>();
+        public string Movie { get; set; } = string.Empty;
     }
 }
 

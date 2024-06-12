@@ -5,6 +5,40 @@
 }
 
 <h1 class="text-center">Add New Movie</h1>
+<style>
+    
+    .custom-file-upload {
+        border: 2px solid #007bff;
+        color: #007bff;
+        background-color: white;
+        display: inline-block;
+        padding: 8px 15px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+        .custom-file-upload:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+    
+   
+
+    .form-label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: bold;
+    }
+
+    .text-danger {
+        font-size: 0.8rem;
+        font-style: italic;
+        color: #dc3545;
+    }
+</style>
+
 
 @if (ViewBag.msg !=null)
 {
@@ -16,7 +50,7 @@
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h4 class="card-title">Movie Details</h4>
+                    <h4 class="card-title text-center">Movie Details</h4>
                     <hr />
                     <form asp-action="Create" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -47,11 +81,21 @@
                             </select>
                             <span asp-validation-for="Genre" class="text-danger"></span>
                         </div>
-                        <div class="mb-3">
+                        <div class="form-group">
                             <label asp-for="Image" class="form-label">Image</label>
                             <input asp-for="Image" class="form-control" />
                             <span asp-validation-for="Image" class="text-danger"></span>
                         </div>
+                        <div class="form-group mt-3">
+                            <label asp-for="Movie" class="form-label">Upload Movie</label>
+                            <div class="upload-container">
+                                <label asp-for="Movie" class="custom-file-upload">
+                                    <i class="fas fa-cloud-upload-alt"></i> Upload
+                                </label>
+                                <input asp-for='Movie' type="file" id="Movie" name="Movie" accept="video/*" style="display: none;" />
+                            </div>
+                            <span class="text-danger" id="MovieValidation"></span>
+                        </div><br/>
 
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Add Movie</button>

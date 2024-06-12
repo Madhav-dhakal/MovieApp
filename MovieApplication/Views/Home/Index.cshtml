@@ -21,8 +21,8 @@
         @if (!Model.Any())
         {
             <div class="col text-center">
-                <div class="alert alert-info " role="alert">
-                   Seach Not Found.
+                <div class="alert alert-info" role="alert">
+                    Search Not Found.
                 </div>
             </div>
         }
@@ -47,10 +47,12 @@
                                 <strong>Duration:</strong> @hours hr @minutes min
                             </p>
                             <div class="rating mb-2">
+                                @{
+                                    int roundedRating = (int)Math.Round(movie.Rating);
+                                }
                                 @for (int i = 1; i <= 5; i++)
                                 {
-                                    var averageRating = movie.Rating;
-                                    if (i <= averageRating)
+                                    if (i <= roundedRating)
                                     {
                                         <i class="fas fa-star text-warning"></i>
                                     }
@@ -60,6 +62,7 @@
                                     }
                                 }
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -95,9 +98,9 @@
         color: #ccc;
     }
 
-        .fa-star.checked {
-            color: #ffcc00;
-        }
+    .far.fa-star.checked {
+        color: #ffcc00;
+    }
 
     .card-img-top {
         transition: transform 0.2s ease-in-out;

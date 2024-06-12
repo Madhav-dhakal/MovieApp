@@ -69,11 +69,7 @@ namespace MovieApplication.Areas.Identity.Pages.Account
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         /// 
-        public enum ProductStatus
-        {
-            Admin,
-            user
-        }
+       
         public class InputModel
         {
             /// <summary>
@@ -115,9 +111,7 @@ namespace MovieApplication.Areas.Identity.Pages.Account
             [RegularExpression(@"^\d{10}$", ErrorMessage = "Invalid phone number")]
             public string Phone { get; set; }
 
-            [Required]
-            public ProductStatus Role { get; set; } = ProductStatus.user;
-
+            
         }
 
 

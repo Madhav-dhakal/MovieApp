@@ -51,8 +51,21 @@
                         <dd class="col-sm-9">@hours hr @minutes min</dd>
 
                         <dt class="col-sm-3">Genre</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Genre)</dd> <!-- Display the genre name -->
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Genre)</dd>
                     </dl>
+
+                    <div class="text-center mt-4">
+                        @if (!string.IsNullOrEmpty(Model.Movie))
+                        {
+                            <button id="watchButton" class="btn btn-primary">
+                                <i class="fa fa-play"></i> Watch Movie
+                            </button>
+                        }
+                        else
+                        {
+                            <p class="text-muted">No movie available to watch.</p>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
@@ -71,3 +84,43 @@
         <p>Please <a href="/Account/Login">login</a> to leave a review.</p>
     }
 </div>
+
+<div class="modal fade" id="watchModal" tabindex="-1" aria-labelledby="watchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="watchModalLabel">Watch Movie</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="ratio ratio-16x9">
+                    <iframe id="movieFrame" src="" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var watchButton = document.getElementById('watchButton');
+            var watchModal = new bootstrap.Modal(document.getElementById('watchModal'));
+            var movieFrame = document.getElementById('movieFrame');
+            var modalTitle = document.getElementById('watchModalLabel');
+
+            if (watchButton) {
+                watchButton.addEventListener('click', function () {
+                    var movieUrl = '@Model.Movie';
+                    movieFrame.src = movieUrl;
+                    modalTitle.innerText = '@Model.MovieName';
+                    watchModal.show();
+                });
+            }
+
+            document.getElementById('watchModal').addEventListener('hidden.bs.modal', function () {
+                movieFrame.src = '';
+            });
+        });
+    </script>
+}

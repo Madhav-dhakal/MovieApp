@@ -44,12 +44,19 @@ namespace MovieApplication.Controllers
                 movieList = movieList.Where(m => m.MovieName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
-            double overallAverageRating = movieList.Any() ? movieList.Average(m => m.Rating) : 0.0;
-
-            ViewBag.averageRating = overallAverageRating;
+            foreach (var movie in movieList)
+            {
+                var ratingsForMovie = _context.Ratings.Where(r => r.MovieId == movie.Id).ToList();
+                int totalRatingsCount = ratingsForMovie.Count();
+                int totalRatingsSum = ratingsForMovie.Sum(r => r.RatingValue);
+                double averageRating = totalRatingsCount > 0 ? (double)totalRatingsSum / totalRatingsCount : 0.0;
+                movie.Rating = averageRating;
+            }
 
             return View(movieList);
         }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -170,11 +170,10 @@ namespace MovieApplication.Controllers
                 return NotFound();
             }
 
-            // Fetch movies and genres from the database
             var movies = await _context.MovieTable.ToListAsync();
             var genres = await _context.GenreTable.ToListAsync();
 
-            // Perform the join in memory
+            
             var movieDetail = (from movie in movies
                                join genre in genres
                                on movie.Genre equals genre.GenreId.ToString()
@@ -188,6 +187,7 @@ namespace MovieApplication.Controllers
                                    Duration = movie.Duration,
                                    Genre = genre.Name,
                                    Rating = movie.Rating,
+                                   Movie = movie.Movie,
                                    Image = movie.ImageUrl
                                }).FirstOrDefault();
 
@@ -270,7 +270,6 @@ namespace MovieApplication.Controllers
         }
 
 
-
         // GET: Movie/Create
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -291,59 +290,74 @@ namespace MovieApplication.Controllers
 
         //Create
         [HttpPost]
-        [ValidateAntiForgeryToken] // only used for post methods
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MovieViewModel ViewModel)
         {
-
             if (ModelState.IsValid)
             {
-                string moviePath = string.Empty;
-                // Handle image upload if an image file is provided
+                string imageUrl = string.Empty;
+                string movieUrl = string.Empty;
+
                 if (ViewModel?.Image != null && ViewModel.Image.Length > 0)
                 {
-                    var uploadResult = await UploadImageToCloudinary(ViewModel.Image);
-                    if (uploadResult != null)
+                    var imageUploadResult = await UploadImageToCloudinary(ViewModel.Image);
+                    if (imageUploadResult != null)
                     {
-                        moviePath = uploadResult.Url.ToString();
-                        
+                        imageUrl = imageUploadResult.Url.ToString();
                     }
-                }     
-
-                // Check if the movie name already exists in the database(x.MovieName=database table data)
-                var existingMovie = await _context.MovieTable.Where(x => x.MovieName == ViewModel.MovieName).SingleOrDefaultAsync();// FirstOrDefaultAsync=linq given by EF core
-
-                if (existingMovie != null )
-                {
-                    // Movie name already exists, return a message
-                    ViewBag.msg = "Cannot insert the same movie name twice.";
-                    var genre = await _context.GenreTable.ToListAsync();
-
-                    ViewBag.Genres = new SelectList(genre, "GenreId", "Name");
-                    return View(ViewModel);
-
                 }
-                else {
-                    var movieModel1 = new MovieModel
+
+                // Video upload to local storage
+                if (ViewModel?.Movie != null && ViewModel.Movie.Length > 0)
+                {
+                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/movies");
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + ViewModel.Movie.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await ViewModel.Movie.CopyToAsync(fileStream);
+                    }
+
+                    movieUrl = "/movies/" + uniqueFileName;
+                }
+
+                
+                var existingMovie = await _context.MovieTable
+                                                  .Where(x => x.MovieName == ViewModel.MovieName)
+                                                  .SingleOrDefaultAsync();
+
+                if (existingMovie != null)
+                {
+                    ViewBag.msg = "Cannot insert the same movie name twice.";
+                    var genres = await _context.GenreTable.ToListAsync();
+                    ViewBag.Genres = new SelectList(genres, "GenreId", "Name");
+                    return View(ViewModel);
+                }
+                else
+                {
+                    var movieModel = new MovieModel
                     {
                         MovieName = ViewModel.MovieName,
                         Description = ViewModel.Description,
                         Director = ViewModel.Director,
                         Duration = ViewModel.Duration,
-                        Genre =   ViewModel.Genre,
+                        Genre = ViewModel.Genre,
                         Rating = ViewModel.Rating,
-                        ImageUrl = moviePath
+                        ImageUrl = imageUrl,
+                        Movie = movieUrl
                     };
 
-                    
-                    _context.MovieTable.Add(movieModel1);
+                    _context.MovieTable.Add(movieModel);
                     await _context.SaveChangesAsync();
                     ViewBag.msg = "Movie added successfully!";
                     return RedirectToAction("List");
                 }
             }
 
-            return View();
+            return View(ViewModel);
         }
+
 
         // GET: Movie/Edit/5
         public async Task<IActionResult> Update(int? id)

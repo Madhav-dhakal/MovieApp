@@ -8,11 +8,11 @@
 
     <form asp-action="Index" method="get" class="mb-4">
         <div class="row justify-content-end">
-            <div class="col-md-12 col-sm-12">
+            <div class="col-md-12 col-sm-12 mb-3">
                 <div class="input-group">
-                    <input type="text" name="searchQuery" class="form-control rounded-1 me-2" placeholder="Search Movie" value="@Context.Request.Query["searchQuery"]" />
-                    <button type="submit" class="btn btn-primary rounded-2"><i class="fas fa-search"></i>Search</button>
-                </div>
+                <input type="text" name="searchQuery" class="form-control rounded-1 me-2" placeholder="Search Movie" value="@Context.Request.Query["searchQuery"]" />
+                <button type="submit" class="btn btn-primary rounded-2"><i class="fas fa-search"></i> Search</button>
+            </div>
             </div>
         </div>
     </form>
@@ -22,7 +22,7 @@
         {
             <div class="col text-center">
                 <div class="alert alert-info" role="alert">
-                    Search Not Found.
+                    No movies found.
                 </div>
             </div>
         }
@@ -48,7 +48,7 @@
                             </p>
                             <div class="rating mb-2">
                                 @{
-                                    int roundedRating = (int)Math.Round(movie.Rating);
+                                    int roundedRating = (int)Math.Floor(movie.Rating);
                                 }
                                 @for (int i = 1; i <= 5; i++)
                                 {
@@ -62,7 +62,6 @@
                                     }
                                 }
                             </div>
-
                         </div>
                     </div>
                 </div>

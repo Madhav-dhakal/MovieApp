@@ -41,7 +41,15 @@ namespace MovieApplication.Controllers
 
             if (!string.IsNullOrEmpty(searchQuery))
             {
-                movieList = movieList.Where(m => m.MovieName.Contains(searchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
+                var searchTerms = searchQuery.Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                movieList = movieList.Where(m =>
+                    searchTerms.Any(term =>
+                        m.MovieName.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                        m.Director.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                        m.Genre.Contains(term, StringComparison.OrdinalIgnoreCase)
+                    )
+                ).ToList();
             }
 
             foreach (var movie in movieList)

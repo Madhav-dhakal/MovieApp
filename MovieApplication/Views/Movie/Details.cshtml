@@ -6,70 +6,155 @@
     int minutes = totalMinutes % 60;
 }
 
-<h1 class="text-center">Movie Details</h1>
+<style>
+    .up{
+        width:40px;
+    }
+    .img-fluid{
+        overflow-x: hidden ;
+        overflow-y :hidden;
 
-<div class="container mt-4">
+    }
+    body {
+        background-color: #3187A2;
+        color: white; 
+    }
+    .container .card {
+        background-color: #4BAAC8;
+        color: white; 
+    }
+    .movie-banner {
+        background-image: url('@Model.Image');
+        background-size: cover;
+        background-position: center;
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        position: relative;
+        text-align: center;
+    }
+
+        .movie-banner h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+    .movie-image-container {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+    }
+
+        .movie-image-container img {
+            transition: transform 0.3s ease-out;
+            width: 100%;
+            height: auto;
+        }
+
+        .movie-image-container:hover img {
+            transform: scale(1.04);
+        }
+
+    .play-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 48px;
+        color: white;
+        opacity: 0;
+        transition: opacity 0.3s ease-out;
+    }
+
+    .movie-image-container:hover .play-icon {
+        opacity: 1;
+    }
+
+    .card-body {
+        padding: 2rem;
+    }
+
+    .movie-name {
+        font-size: 30px;
+    }
+    
+</style>
+<div class="container">
     <div class="card shadow-sm">
-        <div class="row g-0">
-            <div class="col-md-3">
-                <div class="d-flex align-items-center justify-content-center h-90">
-                    @if (!string.IsNullOrEmpty(Model.Image))
-                    {
-                        <img src="@Model.Image" alt="Movie Image" class="img-fluid h-80" />
-                    }
-                    else
-                    {
-                        <p class="text-center">No image available</p>
-                    }
-                </div>
-            </div>
-            <div class="col-md-9">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h4 class="card-title">Movie Information</h4>
-                        <div>
-                            <a asp-action="Update" asp-route-id="@Model?.Id" class="btn btn-warning me-2">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                            <a asp-action="List" class="btn btn-secondary">
-                                <i class="fa fa-arrow-left"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <hr />
-                    <dl class="row">
-                        <dt class="col-sm-3">Movie Name</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.MovieName)</dd>
+<div class="movie-banner">
+    <div class="movie-image-container">
+                
+        @if (!string.IsNullOrEmpty(Model.Image))
+        {
+            <a href="#" id="watchMovieLink">
+                        <img src="@Model.Image" alt="Movie Image" class="img-fluid" style="object-fit: cover; width: 100%; height: auto;" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-play-circle-fill play-icon" viewBox="0 0 16 16">
+                    <path d="M7.204 11.977V4.023a.5.5 0 0 1 .806-.395l5.33 3.977a.5.5 0 0 1 0 .794l-5.33 3.977a.5.5 0 0 1-.806-.395z" />
+                </svg>
+            </a>
+                    
+        }
+        else
+        {
+            <p class="text-center">No image available</p>
+        }
+    </div>
+            
 
-                        <dt class="col-sm-3">Description</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
+</div>
+        <div class="card-body">
+            <div class="row g-0">
+                <div class="col-md-3">
+                    
 
-                        <dt class="col-sm-3">Director</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Director)</dd>
-
-                        <dt class="col-sm-3">Duration</dt>
-                        <dd class="col-sm-9">@hours hr @minutes min</dd>
-
-                        <dt class="col-sm-3">Genre</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Genre)</dd>
-                    </dl>
-
-                    <div class="text-center mt-4">
-                        @if (!string.IsNullOrEmpty(Model.Movie))
+                    <div class="d-flex align-items-center justify-content-center h-80">
+                        @if (!string.IsNullOrEmpty(Model.Image))
                         {
-                            <button id="watchButton" class="btn btn-primary">
-                                <i class="fa fa-play"></i> Watch Movie
-                            </button>
+                            <img src="@Model.Image" alt="Movie Image" class="img-fluid h-80 mt-5" />
+                           
                         }
+                       
                         else
                         {
-                            <p class="text-muted">No movie available to watch.</p>
+                            <p class="text-center">No image available</p>
                         }
                     </div>
+                    
+                    
                 </div>
-            </div>
+                
+                <div class="col-md-9">
+                    <div class="card-body">
+                        <dd class="mb-5">
+
+                            <span class="col-md-8 fw-bold text-uppercase movie-name">@Html.DisplayFor(model => model.MovieName)</span>
+                            
+                            <a asp-action="Update" asp-route-id="@Model?.Id" class="col-md-1 float-md-end btn btn-warning up">
+                                <i class="fa fa-edit"></i> 
+                            </a>
+                            
+                        </dd>
+            
+            <dl class="row">
+                <dd class="col-sm-12 mb-5">@Html.DisplayFor(model => model.Description)</dd>
+
+                <dt class="col-sm-3">Director</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Director)</dd>
+
+                <dt class="col-sm-3">Duration</dt>
+                <dd class="col-sm-9">@hours hr @minutes min</dd>
+
+                <dt class="col-sm-3">Genre</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Genre)</dd>
+            </dl>
         </div>
     </div>
+    </div>
+</div>
 </div>
 
 <div class="text-center mt-4">
@@ -100,17 +185,19 @@
         </div>
     </div>
 </div>
+</div>
 
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var watchButton = document.getElementById('watchButton');
             var watchModal = new bootstrap.Modal(document.getElementById('watchModal'));
             var movieFrame = document.getElementById('movieFrame');
             var modalTitle = document.getElementById('watchModalLabel');
 
-            if (watchButton) {
-                watchButton.addEventListener('click', function () {
+            var watchMovieLink = document.getElementById('watchMovieLink');
+            if (watchMovieLink) {
+                watchMovieLink.addEventListener('click', function (event) {
+                    event.preventDefault();
                     var movieUrl = '@Model.Movie';
                     movieFrame.src = movieUrl;
                     modalTitle.innerText = '@Model.MovieName';

@@ -12,8 +12,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"> </script>
     <style>
-        
-        
         .navbar-brand {
             font-size: 1.8rem;
             font-weight: bold;
@@ -41,18 +39,18 @@
             text-align: center;
         }
 
-            .login-button:hover {
-                background-color: #0056b3; 
-            }
+        .login-button:hover {
+            background-color: #0056b3; 
+        }
 
         .nav-link {
             font-size: 1.2rem;
             color: #fff; 
         }
 
-            .nav-link:hover {
-                color: #cceeff; 
-            }
+        .nav-link:hover {
+            color: #cceeff; 
+        }
 
         .navbar {
             background-color: #343a40; 
@@ -66,9 +64,10 @@
             font-size: 0.8rem;
         }
 
-            .border-top .container{
-                color:white;
-            }
+        .border-top .container {
+            color:white;
+        }
+
         .logout-button {
             background-color: #dc3545;
             color: #fff;
@@ -78,16 +77,16 @@
             transition: background-color 0.3s ease;
         }
 
-            .logout-button:hover {
-                background-color: #c82333;
-            }
+        .logout-button:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm  border-bottom mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom mb-3 fixed-top">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MovieApplication</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">iReview App</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -138,7 +137,7 @@
             
         </nav>
     </header>
-    <div class="container">
+    <div class="container" style="padding-top: 80px;">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

@@ -1104,6 +1104,38 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\movies\6a911f61-8aaa-489b-9426-78c107efeabe_CHHAKKA PANJA.mp4))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\movies\a2960b82-d5e2-4b6f-9841-300cba02d714_Bhaag Milkha Bhaag Official Trailer.mp4))">
+      <SourceType>Package</SourceType>
+      <SourceId>MovieApplication</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/MovieApplication</BasePath>
+      <RelativePath>movies/a2960b82-d5e2-4b6f-9841-300cba02d714_Bhaag Milkha Bhaag Official Trailer.mp4</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\movies\a2960b82-d5e2-4b6f-9841-300cba02d714_Bhaag Milkha Bhaag Official Trailer.mp4))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\movies\a6887e1c-436b-4143-8d18-de39e91ee319_Lucy TRAILER 1.mp4))">
+      <SourceType>Package</SourceType>
+      <SourceId>MovieApplication</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/MovieApplication</BasePath>
+      <RelativePath>movies/a6887e1c-436b-4143-8d18-de39e91ee319_Lucy TRAILER 1.mp4</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\movies\a6887e1c-436b-4143-8d18-de39e91ee319_Lucy TRAILER 1.mp4))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\movies\ab0682ee-7b97-4e35-a941-dfc21dd6abc8_Jhola.mp4))">
       <SourceType>Package</SourceType>
       <SourceId>MovieApplication</SourceId>
